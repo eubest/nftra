@@ -36,7 +36,11 @@ const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActio
   subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
 });
 
-const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
+const validateTransactionData = (transaction: TransactionActionPayloadFragment | null | undefined) => {
+  return transaction?.type && transaction?.action?.amount;
+};
+
+const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
   context
@@ -48,26 +52,23 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
 
   console.log("Start processing Saleor transaction action", action, transaction);
 
-  if (!transaction?.type || !action?.amount) {
-    console.warn(
-      "Received webhook call without transaction data",
-      transaction?.type,
-      action?.amount
-    );
+  if (!validateTransactionData(transaction)) {
+    console.warn("Received webhook call without transaction data", transaction?.type, action?.amount);
     return Response.BadRequest({ success: false, message: "Missing transaction data" });
   }
 
-  const { "saleor-signature": payloadSignature } = req.headers;
+  const { "saleor-signature": payloadSignature } = req.headers as { "saleor-signature": string };
 
   if (!payloadSignature) {
     console.warn("Missing Saleor signature");
     return Response.BadRequest({ success: false, message: "Missing signature" });
   }
 
-  const processedEvents = await getTransactionProcessedEvents(saleorApiUrl, {
+  const processedEvents: string[] = await getTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
   });
-  const eventProcessed = processedEvents.some((signature) => signature === payloadSignature);
+
+  const eventProcessed = processedEvents.some((signature: string) => signature === payloadSignature);
 
   if (eventProcessed) {
     console.log("Event already processed");
@@ -126,4 +127,4 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true });
 };
 
-export default TransactionChargeRequestedWebhook.createHandler(handler);
+export default TransactionChargeRequestedWebhook.createHandler(handleWebhook);
