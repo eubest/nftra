@@ -4,18 +4,20 @@ import {
   TransactionChargeRequestedSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
-import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
-import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { Response } from "retes/response";
-import { getTransactionProcessedEvents } from "@/saleor-app-checkout/backend/payments/getTransactionProcessedEvents";
-import { updateTransactionProcessedEvents } from "@/saleor-app-checkout/backend/payments/updateTransactionProcessedEvents";
+import {
+  getTransactionProcessedEvents,
+  updateTransactionProcessedEvents,
+} from "@/saleor-app-checkout/backend/payments";
 import {
   isAdyenTransaction,
   isDummyTransaction,
   isMollieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
+import { handleMollieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
+import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
-import { NextWebhookApiHandler, SaleorAsyncWebhook } from "@saleor/app-sdk/handlers/next";
+import { NextWebhookApiHandler, SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
 import { saleorApp } from "@/saleor-app-checkout/config/saleorApp";
 
 export const SALEOR_WEBHOOK_TRANSACTION_ENDPOINT = "api/webhooks/saleor/transaction-charge-requested";
@@ -26,14 +28,13 @@ export const config = {
   },
 };
 
-export const TransactionChargeRequestedWebhook =
-  new SaleorAsyncWebhook<TransactionActionPayloadFragment>({
-    name: "Checkout app payment notifications",
-    webhookPath: "api/webhooks/saleor/transaction-charge-requested",
-    event: "TRANSACTION_CHARGE_REQUESTED",
-    apl: saleorApp.apl,
-    subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
-  });
+const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+  name: "Checkout app payment notifications",
+  webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
+  event: "TRANSACTION_CHARGE_REQUESTED",
+  apl: saleorApp.apl,
+  subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
+});
 
 const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
@@ -82,7 +83,7 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   try {
     if (action.actionType === "REFUND") {
       if (isMollieTransaction(transaction)) {
-        await handleMolieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
+        await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
