@@ -4,6 +4,7 @@ import  TransactionChargeRequestedWebhook  from "@/saleor-app-checkout/pages/api
 import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
 import { SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
+import { TransactionActionPayloadFragment } from "@/saleor-app-checkout/graphql"; // Ensure this import is present
 
 const handler = createManifestHandler({
   async manifestFactory(context): Promise<AppManifest> {
@@ -20,7 +21,7 @@ const handler = createManifestHandler({
       supportUrl: `${appBaseUrl}/support`,
       tokenTargetUrl: `${appBaseUrl}/api/register`,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      webhooks: [((TransactionChargeRequestedWebhook as unknown) as SaleorSyncWebhook<TransactionActionPayloadFragment>).getWebhookManifest(appBaseUrl)],
+       webhooks: [((TransactionChargeRequestedWebhook as unknown) as SaleorSyncWebhook<TransactionActionPayloadFragment>).getWebhookManifest(appBaseUrl)],
     };
   },
 });
