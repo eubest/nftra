@@ -18,7 +18,7 @@ import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/provid
 import { NextWebhookApiHandler, SaleorAsyncWebhook } from "@saleor/app-sdk/handlers/next";
 import { saleorApp } from "@/saleor-app-checkout/config/saleorApp";
 
-export const SALEOR_WEBHOOK_TRANSACTION_ENDPOINT = "api/webhooks/saleor/transaction-charged-requested";
+export const SALEOR_WEBHOOK_TRANSACTION_ENDPOINT = "api/webhooks/saleor/transaction-charge-requested";
 
 export const config = {
   api: {
@@ -29,8 +29,8 @@ export const config = {
 export const TransactionChargeRequestedWebhook =
   new SaleorAsyncWebhook<TransactionActionPayloadFragment>({
     name: "Checkout app payment notifications",
-    webhookPath: "api/webhooks/saleor/transaction-charged-requested",
-    syncEvent: "TRANSACTION_CHARGED_REQUESTED",
+    webhookPath: "api/webhooks/saleor/transaction-charge-requested",
+    syncEvent: "TRANSACTION_CHARGE_REQUESTED",
     apl: saleorApp.apl,
     subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
   });

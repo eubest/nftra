@@ -110033,7 +110033,7 @@
             "deprecationReason": null
           },
           {
-            "name": "MISSING_TRANSACTION_CHARGED_REQUESTED_WEBHOOK",
+            "name": "MISSING_TRANSACTION_CHARGE_REQUESTED_WEBHOOK",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -119307,7 +119307,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_CHARGED_REQUESTED",
+            "name": "TRANSACTION_CHARGE_REQUESTED",
             "description": "An action requested for transaction.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.",
             "isDeprecated": false,
             "deprecationReason": null
@@ -120086,7 +120086,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_CHARGED_REQUESTED",
+            "name": "TRANSACTION_CHARGE_REQUESTED",
             "description": "An action requested for transaction.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.",
             "isDeprecated": false,
             "deprecationReason": null
@@ -120930,7 +120930,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_CHARGED_REQUESTED",
+            "name": "TRANSACTION_CHARGE_REQUESTED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

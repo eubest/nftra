@@ -1,7 +1,7 @@
 import { TransactionChargeRequested } from "@/saleor-app-checkout/mocks/fixtures/saleor";
 import endpoint, {
   config,
-} from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charged-requested";
+} from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charge-requested";
 import { SALEOR_DOMAIN_HEADER } from "@saleor/app-sdk/const";
 import { Response } from "retes/response";
 import { testApiHandler } from "next-test-api-route-handler";
@@ -41,11 +41,11 @@ const getReqHeaders = async (saleorDomainHeader: string): Promise<HeadersInit> =
     "Content-Type": "application/json",
     [SALEOR_DOMAIN_HEADER]: saleorDomainHeader,
     "saleor-signature": REQUEST_SIGNATURE,
-    "saleor-event": "TRANSACTION_CHARGED_REQUESTED",
+    "saleor-event": "TRANSACTION_CHARGE_REQUESTED",
   };
 };
 
-describe("Saleor TRANSACTION_CHARGED_REQUESTED webhook handler", () => {
+describe("Saleor TRANSACTION_CHARGE_REQUESTED webhook handler", () => {
   it("Rejects requests without transaction data", () => { // No async or sync keyword
     disableConsole("warn");
 
