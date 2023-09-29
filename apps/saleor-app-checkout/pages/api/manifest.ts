@@ -3,6 +3,7 @@ import { version } from "../../package.json";
 import  TransactionChargeRequestedWebhook  from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charge-requested";
 import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
+import { SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
 
 const handler = createManifestHandler({
   async manifestFactory(context): Promise<AppManifest> {
