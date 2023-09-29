@@ -18,7 +18,7 @@ const handler = createManifestHandler({
       dataPrivacyUrl: `${appBaseUrl}/data-privacy`,
       supportUrl: `${appBaseUrl}/support`,
       tokenTargetUrl: `${appBaseUrl}/api/register`,
-      webhooks: [TransactionChargedRequestedWebhook.getWebhookManifest(appBaseUrl)],
+      webhooks: [(TransactionChargedRequestedWebhook.getWebhookManifest(appBaseUrl) as any)],
     };
   },
 });
