@@ -102,7 +102,8 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
   } catch (err) {
     console.error(err);
-    Sentry.captureException(err);  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    Sentry.captureException(err);
     return res.status(500).json({
       success: false,
       message: "Error while processing event",
