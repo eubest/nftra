@@ -83,13 +83,13 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
 
   try {
     if (action.actionType === "REFUND") {
-      if (isMollieTransaction(transaction)) {
+      if (isMollieTransaction(transaction as any)) { // Add type assertion as needed
         await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
-      if (isAdyenTransaction(transaction)) {
+      if (isAdyenTransaction(transaction as any)) { // Add type assertion as needed
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
-      if (isDummyTransaction(transaction)) {
+      if (isDummyTransaction(transaction as any)) { // Add type assertion as needed
         await handleDummyRefund({
           saleorApiUrl,
           refund: {
@@ -102,10 +102,10 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
 
     if (action.actionType === "VOID") {
-      if (isMollieTransaction(transaction)) {
+      if (isMollieTransaction(transaction as any)) { // Add type assertion as needed
         // TODO: Handle Mollie void payment
       }
-      if (isAdyenTransaction(transaction)) {
+      if (isAdyenTransaction(transaction as any)) { // Add type assertion as needed
         // TODO: Handle Adyen void payment
       }
     }
