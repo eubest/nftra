@@ -40,6 +40,11 @@ const validateTransactionData = (transaction: TransactionActionPayloadFragment |
   return transaction?.type && transaction?.action?.amount;
 };
 
+// Explicitly type the headers to avoid using 'any'
+type HeadersWithSignature = {
+  "saleor-signature": string;
+};
+
 const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
@@ -57,7 +62,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     return Response.BadRequest({ success: false, message: "Missing transaction data" });
   }
 
-  const { "saleor-signature": payloadSignature } = req.headers as { "saleor-signature": string };
+  const { "saleor-signature": payloadSignature } = req.headers as HeadersWithSignature;
 
   if (!payloadSignature) {
     console.warn("Missing Saleor signature");
@@ -83,13 +88,13 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
 
   try {
     if (action.actionType === "REFUND") {
-      if (isMollieTransaction(transaction as any)) { // Add type assertion as needed
+      if (isMollieTransaction(transaction)) {
         await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
-      if (isAdyenTransaction(transaction as any)) { // Add type assertion as needed
+      if (isAdyenTransaction(transaction)) {
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
-      if (isDummyTransaction(transaction as any)) { // Add type assertion as needed
+      if (isDummyTransaction(transaction)) {
         await handleDummyRefund({
           saleorApiUrl,
           refund: {
@@ -102,10 +107,10 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
 
     if (action.actionType === "VOID") {
-      if (isMollieTransaction(transaction as any)) { // Add type assertion as needed
+      if (isMollieTransaction(transaction)) {
         // TODO: Handle Mollie void payment
       }
-      if (isAdyenTransaction(transaction as any)) { // Add type assertion as needed
+      if (isAdyenTransaction(transaction)) {
         // TODO: Handle Adyen void payment
       }
     }
