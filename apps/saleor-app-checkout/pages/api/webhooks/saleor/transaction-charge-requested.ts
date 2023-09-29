@@ -40,11 +40,6 @@ const validateTransactionData = (transaction: TransactionActionPayloadFragment |
   return transaction?.type && transaction?.action?.amount;
 };
 
-// Explicitly type the headers to avoid using 'any'
-type HeadersWithSignature = {
-  "saleor-signature": string;
-};
-
 const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
@@ -62,16 +57,16 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     return Response.BadRequest({ success: false, message: "Missing transaction data" });
   }
 
-  const { "saleor-signature": payloadSignature } = req.headers as HeadersWithSignature;
+  const { "saleor-signature": payloadSignature } = req.headers as { "saleor-signature": string };
 
   if (!payloadSignature) {
     console.warn("Missing Saleor signature");
     return Response.BadRequest({ success: false, message: "Missing signature" });
   }
 
-  const processedEvents: string[] = await getTransactionProcessedEvents(saleorApiUrl, {
+  const processedEvents: string[] = (await getTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
-  });
+  })) as string[];
 
   const eventProcessed = processedEvents.some((signature: string) => signature === payloadSignature);
 
@@ -116,7 +111,9 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
   } catch (err) {
     console.error(err);
-    Sentry.captureException(err);
+    if (err instanceof Error) {
+      Sentry.captureException(err);
+    }
     return res.status(500).json({
       success: false,
       message: "Error while processing event",
