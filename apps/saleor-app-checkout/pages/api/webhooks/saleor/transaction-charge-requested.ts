@@ -1,7 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
 import {
   TransactionActionPayloadFragment,
-  TransactionActionRequestSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { Response } from "retes/response";
