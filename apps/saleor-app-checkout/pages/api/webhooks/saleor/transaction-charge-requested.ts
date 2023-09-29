@@ -109,7 +109,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
       message: "Error while processing event",
     });
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   await updateTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
     input: JSON.stringify([...processedEvents, payloadSignature]),
