@@ -22344,22 +22344,6 @@ export type TransactionCancelationRequested = Event & {
  *
  * Note: this API is currently in Feature Preview and can be subject to changes at later point.
  */
-export type TransactionChargeRequested = Event & {
-  __typename?: "TransactionChargeRequested";
-  /** Requested action data. */
-  action: TransactionAction;
-  /** Time of the event. */
-  issuedAt?: Maybe<Scalars["DateTime"]>;
-  /** The user or application that triggered the event. */
-  issuingPrincipal?: Maybe<IssuingPrincipal>;
-  /** The application receiving the webhook. */
-  recipient?: Maybe<App>;
-  /** Look up a transaction. */
-  transaction?: Maybe<TransactionItem>;
-  /** Saleor version that triggered the event. */
-  version?: Maybe<Scalars["String"]>;
-};
-
 /**
  * Create transaction for checkout or order.
  *
