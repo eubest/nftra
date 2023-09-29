@@ -3,7 +3,7 @@ mutation CreateWebhooks($targetUrl: String, $query: String) {
     input: {
       name: "Checkout app payment notifications"
       targetUrl: $targetUrl
-      events: [TRANSACTION_ACTION_REQUEST]
+      events: [TRANSACTION_CHARGE_REQUESTED]
       isActive: true
       query: $query
     }
