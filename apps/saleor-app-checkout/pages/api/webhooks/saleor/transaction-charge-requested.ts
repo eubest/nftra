@@ -30,7 +30,7 @@ export const TransactionChargeRequestedWebhook =
   new SaleorAsyncWebhook<TransactionActionPayloadFragment>({
     name: "Checkout app payment notifications",
     webhookPath: "api/webhooks/saleor/transaction-charge-requested",
-    asyncEvent: "TRANSACTION_CHARGE_REQUESTED",
+    syncEvents: "TRANSACTION_CHARGE_REQUESTED",
     apl: saleorApp.apl,
     subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
   });
