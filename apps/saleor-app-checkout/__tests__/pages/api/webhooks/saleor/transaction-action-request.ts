@@ -1,7 +1,7 @@
-import { transactionActionRequest } from "@/saleor-app-checkout/mocks/fixtures/saleor";
+import { TransactionChargedRequested } from "@/saleor-app-checkout/mocks/fixtures/saleor";
 import endpoint, {
   config,
-} from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-action-request";
+} from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charged-requested";
 import { SALEOR_DOMAIN_HEADER } from "@saleor/app-sdk/const";
 import { Response } from "retes/response";
 import { testApiHandler } from "next-test-api-route-handler";
@@ -41,11 +41,11 @@ const getReqHeaders = async (saleorDomainHeader: string): Promise<HeadersInit> =
     "Content-Type": "application/json",
     [SALEOR_DOMAIN_HEADER]: saleorDomainHeader,
     "saleor-signature": REQUEST_SIGNATURE,
-    "saleor-event": "transaction_action_request",
+    "saleor-event": "TRANSACTION_CHARGED_REQUESTED",
   };
 };
 
-describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
+describe("Saleor TRANSACTION_CHARGED_REQUESTED webhook handler", () => {
   it("Rejects requests without transaction data", async () => {
     disableConsole("warn");
 
@@ -57,7 +57,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
       test: async ({ fetch }) => {
         const res = await fetch({
           method: "POST",
-          body: JSON.stringify(transactionActionRequest.missingData),
+          body: JSON.stringify(TransactionChargedRequested.missingData),
           headers: await getReqHeaders("saleor-api-host.saleor.localhost:8000"),
         });
 
@@ -79,7 +79,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
       test: async ({ fetch }) => {
         const res = await fetch({
           method: "POST",
-          body: JSON.stringify(transactionActionRequest.adyenRefund),
+          body: JSON.stringify(TransactionChargedRequested.adyenRefund),
           headers: await getReqHeaders("saleor-api-host.saleor.localhost:8000"),
         });
 
@@ -103,7 +103,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
         test: async ({ fetch }) => {
           const res = await fetch({
             method: "POST",
-            body: JSON.stringify(transactionActionRequest.mollieRefund),
+            body: JSON.stringify(TransactionChargedRequested.mollieRefund),
             headers: await getReqHeaders("saleor-api-host.saleor.localhost:8000"),
           });
 
@@ -112,7 +112,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
             success: true,
           });
           expect(updateTransactionProcessedEvents).toHaveBeenCalledWith({
-            id: transactionActionRequest.mollieRefund.transaction?.id,
+            id: TransactionChargedRequested.mollieRefund.transaction?.id,
             input: JSON.stringify([REQUEST_SIGNATURE]),
           });
         },
@@ -126,7 +126,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
         test: async ({ fetch }) => {
           const res = await fetch({
             method: "POST",
-            body: JSON.stringify(transactionActionRequest.adyenRefund),
+            body: JSON.stringify(TransactionChargedRequested.adyenRefund),
             headers: await getReqHeaders("saleor-api-host.saleor.localhost:8000"),
           });
 
@@ -135,7 +135,7 @@ describe("Saleor TRANSACTION_ACTION_REQUEST webhook handler", () => {
             success: true,
           });
           expect(updateTransactionProcessedEvents).toHaveBeenCalledWith({
-            id: transactionActionRequest.adyenRefund.transaction?.id,
+            id: TransactionChargedRequested.adyenRefund.transaction?.id,
             input: JSON.stringify([REQUEST_SIGNATURE]),
           });
         },

@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import {
   TransactionActionPayloadFragment,
-  TransactionActionRequestSubscriptionDocument,
+  TransactionChargedRequestedSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
@@ -18,7 +18,7 @@ import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/provid
 import { NextWebhookApiHandler, SaleorAsyncWebhook } from "@saleor/app-sdk/handlers/next";
 import { saleorApp } from "@/saleor-app-checkout/config/saleorApp";
 
-export const SALEOR_WEBHOOK_TRANSACTION_ENDPOINT = "api/webhooks/saleor/transaction-action-request";
+export const SALEOR_WEBHOOK_TRANSACTION_ENDPOINT = "api/webhooks/saleor/transaction-charged-requested";
 
 export const config = {
   api: {
@@ -26,13 +26,13 @@ export const config = {
   },
 };
 
-export const transactionActionRequestWebhook =
+export const TransactionChargedRequestedWebhook =
   new SaleorAsyncWebhook<TransactionActionPayloadFragment>({
     name: "Checkout app payment notifications",
-    webhookPath: "api/webhooks/saleor/transaction-action-request",
-    asyncEvent: "TRANSACTION_ACTION_REQUEST",
+    webhookPath: "api/webhooks/saleor/transaction-charged-requested",
+    asyncEvent: "TRANSACTION_CHARGED_REQUESTED",
     apl: saleorApp.apl,
-    subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
+    subscriptionQueryAst: TransactionChargedRequestedSubscriptionDocument,
   });
 
 const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
@@ -125,4 +125,4 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true });
 };
 
-export default transactionActionRequestWebhook.createHandler(handler);
+export default TransactionChargedRequestedWebhook.createHandler(handler);

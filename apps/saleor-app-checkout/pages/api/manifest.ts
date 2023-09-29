@@ -1,6 +1,6 @@
 import { appName } from "../../constants";
 import { version } from "../../package.json";
-import { transactionActionRequestWebhook } from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-action-request";
+import { TransactionChargedRequestedWebhook } from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charged-requested";
 import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
 
@@ -18,7 +18,7 @@ const handler = createManifestHandler({
       dataPrivacyUrl: `${appBaseUrl}/data-privacy`,
       supportUrl: `${appBaseUrl}/support`,
       tokenTargetUrl: `${appBaseUrl}/api/register`,
-      webhooks: [transactionActionRequestWebhook.getWebhookManifest(appBaseUrl)],
+      webhooks: [TransactionChargedRequestedWebhook.getWebhookManifest(appBaseUrl)],
     };
   },
 });

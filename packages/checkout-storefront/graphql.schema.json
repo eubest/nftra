@@ -27687,7 +27687,7 @@
           },
           {
             "kind": "OBJECT",
-            "name": "TransactionActionRequest",
+            "name": "TransactionChargedRequested",
             "ofType": null
           },
           {
@@ -105858,7 +105858,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "TransactionActionRequest",
+        "name": "TransactionChargedRequested",
         "description": "Event sent when transaction action is requested.\n\nAdded in Saleor 3.4.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.",
         "fields": [
           {
@@ -108639,7 +108639,7 @@
             "deprecationReason": null
           },
           {
-            "name": "MISSING_TRANSACTION_ACTION_REQUEST_WEBHOOK",
+            "name": "MISSING_TRANSACTION_CHARGED_REQUESTED_WEBHOOK",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -117901,7 +117901,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_ACTION_REQUEST",
+            "name": "TRANSACTION_CHARGED_REQUESTED",
             "description": "An action requested for transaction.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.",
             "isDeprecated": false,
             "deprecationReason": null
@@ -118668,7 +118668,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_ACTION_REQUEST",
+            "name": "TRANSACTION_CHARGED_REQUESTED",
             "description": "An action requested for transaction.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.",
             "isDeprecated": false,
             "deprecationReason": null
@@ -119500,7 +119500,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSACTION_ACTION_REQUEST",
+            "name": "TRANSACTION_CHARGED_REQUESTED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

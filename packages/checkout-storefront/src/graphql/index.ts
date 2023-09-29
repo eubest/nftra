@@ -22572,8 +22572,8 @@ export type TransactionActionEnum = "CANCEL" | "CHARGE" | "REFUND" | "VOID";
  *
  * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.
  */
-export type TransactionActionRequest = Event & {
-  __typename?: "TransactionActionRequest";
+export type TransactionChargedRequested = Event & {
+  __typename?: "TransactionChargedRequested";
   /** Requested action data. */
   action: TransactionAction;
   /** Time of the event. */
@@ -23343,7 +23343,7 @@ export type TransactionRequestActionError = {
 export type TransactionRequestActionErrorCode =
   | "GRAPHQL_ERROR"
   | "INVALID"
-  | "MISSING_TRANSACTION_ACTION_REQUEST_WEBHOOK"
+  | "MISSING_TRANSACTION_CHARGED_REQUESTED_WEBHOOK"
   | "NOT_FOUND";
 
 /**
@@ -25413,7 +25413,7 @@ export type WebhookEventTypeAsyncEnum =
    *
    * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.
    */
-  | "TRANSACTION_ACTION_REQUEST"
+  | "TRANSACTION_CHARGED_REQUESTED"
   /**
    * Transaction item metadata is updated.
    *
@@ -25770,7 +25770,7 @@ export type WebhookEventTypeEnum =
    *
    * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.
    */
-  | "TRANSACTION_ACTION_REQUEST"
+  | "TRANSACTION_CHARGED_REQUESTED"
   /**
    * Event called when cancel has been requested for transaction.
    *
@@ -26006,7 +26006,7 @@ export type WebhookSampleEventTypeEnum =
   | "STAFF_DELETED"
   | "STAFF_UPDATED"
   | "THUMBNAIL_CREATED"
-  | "TRANSACTION_ACTION_REQUEST"
+  | "TRANSACTION_CHARGED_REQUESTED"
   | "TRANSACTION_ITEM_METADATA_UPDATED"
   | "TRANSLATION_CREATED"
   | "TRANSLATION_UPDATED"

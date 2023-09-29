@@ -90,7 +90,7 @@ export const prepareSaleorTransaction = (
   };
 };
 
-export const transactionActionRequest: Record<
+export const TransactionChargedRequested: Record<
   "missingData" | "adyenRefund" | "mollieRefund",
   Partial<TransactionActionPayloadFragment>
 > = {

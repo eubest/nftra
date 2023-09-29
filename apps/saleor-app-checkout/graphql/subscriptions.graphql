@@ -1,6 +1,6 @@
-subscription TransactionActionRequestSubscription {
+subscription TransactionChargedRequestedSubscription {
   event {
-    ... on TransactionActionRequest {
+    ... on TransactionChargedRequested {
       # temporary paste fragment due to Saleor validation issues
       transaction {
         id
@@ -28,7 +28,7 @@ subscription TransactionActionRequestSubscription {
   }
 }
 
-fragment TransactionActionPayload on TransactionActionRequest {
+fragment TransactionActionPayload on TransactionChargedRequested {
   transaction {
     id
     reference
