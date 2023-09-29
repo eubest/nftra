@@ -46,7 +46,7 @@ const getReqHeaders = async (saleorDomainHeader: string): Promise<HeadersInit> =
 };
 
 describe("Saleor TRANSACTION_CHARGED_REQUESTED webhook handler", () => {
-  it("Rejects requests without transaction data", sync () => {
+  it("Rejects requests without transaction data", () => { // No async or sync keyword
     disableConsole("warn");
 
     await testApiHandler({
