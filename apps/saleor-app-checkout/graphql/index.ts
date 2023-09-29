@@ -22296,22 +22296,6 @@ export type TransactionActionEnum = "CANCEL" | "CHARGE" | "REFUND" | "VOID";
  *
  * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.
  */
-// export type TransactionChargeRequested = Event & {
-//   __typename?: "TransactionChargeRequested";
-//   /** Requested action data. */
-//   action: TransactionAction;
-//   /** Time of the event. */
-//   issuedAt?: Maybe<Scalars["DateTime"]>;
-//   /** The user or application that triggered the event. */
-//   issuingPrincipal?: Maybe<IssuingPrincipal>;
-//   /** The application receiving the webhook. */
-//   recipient?: Maybe<App>;
-//   /** Look up a transaction. */
-//   transaction?: Maybe<TransactionItem>;
-//   /** Saleor version that triggered the event. */
-//   version?: Maybe<Scalars["String"]>;
-// };
-
 /**
  * Event sent when transaction cancelation is requested.
  *
@@ -23063,7 +23047,7 @@ export type TransactionRequestActionError = {
 export type TransactionRequestActionErrorCode =
   | "GRAPHQL_ERROR"
   | "INVALID"
-  | "MISSING_TRANSACTION_CHARGE_REQUESTED_WEBHOOK"
+  | "MISSING_TRANSACTION_ACTION_REQUEST_WEBHOOK"
   | "NOT_FOUND";
 
 /**
@@ -25090,7 +25074,7 @@ export type WebhookEventTypeAsyncEnum =
    *
    * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.
    */
-  | "TRANSACTION_CHARGE_REQUESTED"
+  | "TRANSACTION_ACTION_REQUEST"
   /**
    * Transaction item metadata is updated.
    *
@@ -25429,7 +25413,7 @@ export type WebhookEventTypeEnum =
    *
    * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TRANSACTION_CHARGE_REQUESTED`, `TRANSACTION_REFUND_REQUESTED`, `TRANSACTION_CANCELATION_REQUESTED` instead.
    */
-  | "TRANSACTION_CHARGE_REQUESTED"
+  | "TRANSACTION_ACTION_REQUEST"
   /**
    * Event called when cancel has been requested for transaction.
    *
@@ -25657,7 +25641,7 @@ export type WebhookSampleEventTypeEnum =
   | "STAFF_DELETED"
   | "STAFF_UPDATED"
   | "THUMBNAIL_CREATED"
-  | "TRANSACTION_CHARGE_REQUESTED"
+  | "TRANSACTION_ACTION_REQUEST"
   | "TRANSACTION_ITEM_METADATA_UPDATED"
   | "TRANSLATION_CREATED"
   | "TRANSLATION_UPDATED"
@@ -26462,9 +26446,9 @@ export type TransactionUpdateProcessedEventsMutation = {
   } | null;
 };
 
-export type TransactionChargeRequestedSubscriptionVariables = Exact<{ [key: string]: never }>;
+export type TransactionActionRequestSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type TransactionChargeRequestedSubscription = {
+export type TransactionActionRequestSubscription = {
   __typename?: "Subscription";
   event?:
     | { __typename?: "AddressCreated" }
@@ -26579,7 +26563,7 @@ export type TransactionChargeRequestedSubscription = {
     | { __typename?: "StaffUpdated" }
     | { __typename?: "ThumbnailCreated" }
     | {
-        __typename?: "TransactionChargeRequested";
+        __typename?: "TransactionActionRequest";
         transaction?: {
           __typename?: "TransactionItem";
           id: string;
@@ -26616,7 +26600,7 @@ export type TransactionChargeRequestedSubscription = {
 };
 
 export type TransactionActionPayloadFragment = {
-  __typename?: "TransactionChargeRequested";
+  __typename?: "TransactionActionRequest";
   transaction?: {
     __typename?: "TransactionItem";
     id: string;
@@ -26826,7 +26810,7 @@ export const TransactionFragmentDoc = gql`
   ${TransactionEventFragmentDoc}
 `;
 export const TransactionActionPayloadFragmentDoc = gql`
-  fragment TransactionActionPayload on TransactionChargeRequested {
+  fragment TransactionActionPayload on TransactionActionRequest {
     transaction {
       id
       reference
@@ -27222,10 +27206,10 @@ export function useTransactionUpdateProcessedEventsMutation() {
     TransactionUpdateProcessedEventsMutationVariables
   >(TransactionUpdateProcessedEventsDocument);
 }
-export const TransactionChargeRequestedSubscriptionDocument = gql`
-  subscription TransactionChargeRequestedSubscription {
+export const TransactionActionRequestSubscriptionDocument = gql`
+  subscription TransactionActionRequestSubscription {
     event {
-      ... on TransactionChargeRequested {
+      ... on TransactionActionRequest {
         transaction {
           id
           reference
@@ -27253,20 +27237,20 @@ export const TransactionChargeRequestedSubscriptionDocument = gql`
   }
 `;
 
-export function useTransactionChargeRequestedSubscription<
-  TData = TransactionChargeRequestedSubscription
+export function useTransactionActionRequestSubscription<
+  TData = TransactionActionRequestSubscription
 >(
   options: Omit<
-    Urql.UseSubscriptionArgs<TransactionChargeRequestedSubscriptionVariables>,
+    Urql.UseSubscriptionArgs<TransactionActionRequestSubscriptionVariables>,
     "query"
   > = {},
-  handler?: Urql.SubscriptionHandler<TransactionChargeRequestedSubscription, TData>
+  handler?: Urql.SubscriptionHandler<TransactionActionRequestSubscription, TData>
 ) {
   return Urql.useSubscription<
-    TransactionChargeRequestedSubscription,
+    TransactionActionRequestSubscription,
     TData,
-    TransactionChargeRequestedSubscriptionVariables
-  >({ query: TransactionChargeRequestedSubscriptionDocument, ...options }, handler);
+    TransactionActionRequestSubscriptionVariables
+  >({ query: TransactionActionRequestSubscriptionDocument, ...options }, handler);
 }
 export const CreateWebhooksDocument = gql`
   mutation CreateWebhooks($targetUrl: String, $query: String) {
@@ -27274,7 +27258,7 @@ export const CreateWebhooksDocument = gql`
       input: {
         name: "Checkout app payment notifications"
         targetUrl: $targetUrl
-        events: [TRANSACTION_CHARGE_REQUESTED]
+        events: [TRANSACTION_ACTION_REQUEST]
         isActive: true
         query: $query
       }
