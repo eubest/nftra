@@ -6,7 +6,6 @@ import {
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { Response } from "retes/response";
 import {
-  getTransactionProcessedEvents,
   updateTransactionProcessedEvents,
 } from "@/saleor-app-checkout/backend/payments";
 import {
@@ -64,14 +63,6 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     return Response.BadRequest({ success: false, message: "Missing signature" });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const eventProcessed = processedEvents.some((signature: string) => signature === payloadSignature);
-
-  if (eventProcessed) {
-    console.log("Event already processed");
-    return Response.OK({ success: true, message: "Event already processed" });
-  }
-
   const transactionReversal: TransactionReversal = {
     id: transaction.reference,
     amount: action.amount,
@@ -81,9 +72,11 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
   try {
     if (action.actionType === "REFUND") {
       if (isMollieTransaction(transaction)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isDummyTransaction(transaction)) {
