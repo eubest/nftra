@@ -64,10 +64,11 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     return Response.BadRequest({ success: false, message: "Missing signature" });
   }
 
-  const processedEvents: string[] = (await getTransactionProcessedEvents(saleorApiUrl, {
+  const processedEvents: string[] = await getTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
-  })) as string[];
+  });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const eventProcessed = processedEvents.some((signature: string) => signature === payloadSignature);
 
   if (eventProcessed) {
@@ -90,6 +91,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isDummyTransaction(transaction)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleDummyRefund({
           saleorApiUrl,
           refund: {
@@ -111,9 +113,8 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
   } catch (err) {
     console.error(err);
-    if (err instanceof Error) {
-      Sentry.captureException(err);
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    Sentry.captureException(err);
     return res.status(500).json({
       success: false,
       message: "Error while processing event",
