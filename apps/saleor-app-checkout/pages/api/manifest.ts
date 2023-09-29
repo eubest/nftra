@@ -1,6 +1,6 @@
 import { appName } from "../../constants";
 import { version } from "../../package.json";
-import { TransactionChargedRequestedWebhook } from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charged-requested";
+import { TransactionChargeRequestedWebhook } from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charged-requested";
 import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
 
@@ -19,7 +19,7 @@ const handler = createManifestHandler({
       supportUrl: `${appBaseUrl}/support`,
       tokenTargetUrl: `${appBaseUrl}/api/register`,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      webhooks: [(TransactionChargedRequestedWebhook.getWebhookManifest(appBaseUrl) as any)],
+      webhooks: [(TransactionChargeRequestedWebhook.getWebhookManifest(appBaseUrl) as any)],
     };
   },
 });

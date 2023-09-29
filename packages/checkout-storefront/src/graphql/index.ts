@@ -22572,8 +22572,8 @@ export type TransactionActionEnum = "CANCEL" | "CHARGE" | "REFUND" | "VOID";
  *
  * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.
  */
-export type TransactionChargedRequested = Event & {
-  __typename?: "TransactionChargedRequested";
+export type TransactionChargeRequested = Event & {
+  __typename?: "TransactionChargeRequested";
   /** Requested action data. */
   action: TransactionAction;
   /** Time of the event. */

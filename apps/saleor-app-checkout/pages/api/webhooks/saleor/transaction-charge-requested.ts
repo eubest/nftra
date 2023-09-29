@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import {
   TransactionActionPayloadFragment,
-  TransactionChargedRequestedSubscriptionDocument,
+  TransactionChargeRequestedSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
@@ -26,13 +26,13 @@ export const config = {
   },
 };
 
-export const TransactionChargedRequestedWebhook =
+export const TransactionChargeRequestedWebhook =
   new SaleorAsyncWebhook<TransactionActionPayloadFragment>({
     name: "Checkout app payment notifications",
     webhookPath: "api/webhooks/saleor/transaction-charged-requested",
     syncEvent: "TRANSACTION_CHARGED_REQUESTED",
     apl: saleorApp.apl,
-    subscriptionQueryAst: TransactionChargedRequestedSubscriptionDocument,
+    subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
   });
 
 const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
@@ -125,4 +125,4 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true });
 };
 
-export default TransactionChargedRequestedWebhook.createHandler(handler);
+export default TransactionChargeRequestedWebhook.createHandler(handler);

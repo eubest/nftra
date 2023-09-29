@@ -22298,8 +22298,8 @@ export type TransactionActionEnum = "CANCEL" | "CHARGE" | "REFUND" | "VOID";
  *
  * DEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.
  */
-export type TransactionChargedRequested = Event & {
-  __typename?: "TransactionChargedRequested";
+export type TransactionChargeRequested = Event & {
+  __typename?: "TransactionChargeRequested";
   /** Requested action data. */
   action: TransactionAction;
   /** Time of the event. */
@@ -40988,16 +40988,16 @@ export type TransactionActionFieldPolicy = {
   actionType?: FieldPolicy<any> | FieldReadFunction<any>;
   amount?: FieldPolicy<any> | FieldReadFunction<any>;
 };
-export type TransactionChargedRequestedKeySpecifier = (
+export type TransactionChargeRequestedKeySpecifier = (
   | "action"
   | "issuedAt"
   | "issuingPrincipal"
   | "recipient"
   | "transaction"
   | "version"
-  | TransactionChargedRequestedKeySpecifier
+  | TransactionChargeRequestedKeySpecifier
 )[];
-export type TransactionChargedRequestedFieldPolicy = {
+export type TransactionChargeRequestedFieldPolicy = {
   action?: FieldPolicy<any> | FieldReadFunction<any>;
   issuedAt?: FieldPolicy<any> | FieldReadFunction<any>;
   issuingPrincipal?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -45949,12 +45949,12 @@ export type StrictTypedTypePolicies = {
       | (() => undefined | TransactionActionKeySpecifier);
     fields?: TransactionActionFieldPolicy;
   };
-  TransactionChargedRequested?: Omit<TypePolicy, "fields" | "keyFields"> & {
+  TransactionChargeRequested?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:
       | false
-      | TransactionChargedRequestedKeySpecifier
-      | (() => undefined | TransactionChargedRequestedKeySpecifier);
-    fields?: TransactionChargedRequestedFieldPolicy;
+      | TransactionChargeRequestedKeySpecifier
+      | (() => undefined | TransactionChargeRequestedKeySpecifier);
+    fields?: TransactionChargeRequestedFieldPolicy;
   };
   TransactionCancelationRequested?: Omit<TypePolicy, "fields" | "keyFields"> & {
     keyFields?:

@@ -27976,7 +27976,7 @@
           },
           {
             "kind": "OBJECT",
-            "name": "TransactionChargedRequested",
+            "name": "TransactionChargeRequested",
             "ofType": null
           },
           {
@@ -107252,7 +107252,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "TransactionChargedRequested",
+        "name": "TransactionChargeRequested",
         "description": "Event sent when transaction action is requested.\n\nAdded in Saleor 3.4.\n\nDEPRECATED: this subscription will be removed in Saleor 3.14 (Preview Feature). Use `TransactionChargeRequested`, `TransactionRefundRequested`, `TransactionCancelationRequested` instead.",
         "fields": [
           {
