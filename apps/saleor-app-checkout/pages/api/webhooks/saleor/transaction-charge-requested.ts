@@ -34,7 +34,7 @@ enum WebhookEventTypeSyncEnum {
 const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
-  event: WebhookEventTypeSyncEnum.TRANSACTION_CHARGE_REQUESTED,
+  event: WebhookEventTypeSyncEnum.TRANSACTION_CHARGE_REQUESTED as unknown as SyncWebhookEventType,
   apl: saleorApp.apl,
   subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
