@@ -25,10 +25,16 @@ export const config = {
   },
 };
 
+enum WebhookEventTypeSyncEnum {
+  // ... (all the other enum values you provided)
+  TRANSACTION_CHARGE_REQUESTED = "TRANSACTION_CHARGE_REQUESTED",
+  // ... (all the other enum values you provided)
+}
+
 const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
-  event: "TRANSACTION_CHARGE_REQUESTED",
+  event: WebhookEventTypeSyncEnum.TRANSACTION_CHARGE_REQUESTED,
   apl: saleorApp.apl,
   subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
