@@ -9,9 +9,9 @@ import { updateTransactionProcessedEvents } from "@/saleor-app-checkout/backend/
 import {
   isAdyenTransaction,
   isDummyTransaction,
-  isMollieTransaction,
+  isMolieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
-import { handleMollieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
+import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/molie";
 import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
 import { NextWebhookApiHandler, SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
