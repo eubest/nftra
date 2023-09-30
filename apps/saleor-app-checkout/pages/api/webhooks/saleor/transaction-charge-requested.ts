@@ -4,15 +4,14 @@ import {
   TransactionActionRequestSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
+import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
+import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { Response } from "retes/response";
-import { updateTransactionProcessedEvents } from "@/saleor-app-checkout/backend/payments/updateTransactionProcessedEvents";
 import {
   isAdyenTransaction,
   isDummyTransaction,
   isMollieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
-import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
-import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
 import { NextWebhookApiHandler, SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
 import { saleorApp } from "@/saleor-app-checkout/config/saleorApp";
@@ -25,58 +24,46 @@ export const config = {
   },
 };
 
-enum WebhookEventTypeSyncEnum {
-  // ... (all the other enum values you provided)
-  TRANSACTION_CHARGE_REQUESTED = "TRANSACTION_CHARGE_REQUESTED",
-  // ... (all the other enum values you provided)
-}
-
-const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
-  event: WebhookEventTypeSyncEnum.TRANSACTION_CHARGE_REQUESTED as unknown as SyncWebhookEventType,
+  event: "TRANSACTION_CHARGE_REQUESTED",
   apl: saleorApp.apl,
   subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
 
-const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
+const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
   context
 ) => {
   const {
     authData: { saleorApiUrl },
-    payload: { transaction, action },
+    payload: { transaction, action, pspReference },
   } = context;
 
-  console.log("Start processing Saleor transaction action", action, transaction);
+  console.log("Start processing Saleor transaction action", action, transaction, pspReference);
 
-  if (!transaction?.type || !action?.amount) {
+  if (!transaction?.type || !action?.amount || !pspReference) {
     console.warn(
-      "Received webhook call without transaction data",
+      "Received webhook call without necessary data",
       transaction?.type,
-      action?.amount
+      action?.amount,
+      pspReference
     );
-    return Response.BadRequest({ success: false, message: "Missing transaction data" });
-  }
-
-  const { "saleor-signature": payloadSignature } = req.headers;
-
-  if (!payloadSignature) {
-    console.warn("Missing Saleor signature");
-    return Response.BadRequest({ success: false, message: "Missing signature" });
+    return Response.BadRequest({ success: false, message: "Missing necessary data" });
   }
 
   const transactionReversal: TransactionReversal = {
     id: transaction.reference,
     amount: action.amount,
     currency: transaction.authorizedAmount.currency,
+    pspReference: pspReference
   };
 
   try {
     if (action.actionType === "REFUND") {
       if (isMollieTransaction(transaction)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleMolieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
@@ -110,14 +97,14 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
       message: "Error while processing event",
     });
   }
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
   await updateTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
     input: JSON.stringify([...processedEvents, payloadSignature]),
   });
 
-  console.log("Refund processing complete");
-  return res.status(200).json({ success: true });
+  console.log("Refund processing complete with pspReference:", pspReference);
+  return res.status(200).json({ success: true, pspReference: pspReference });
 };
 
-export default TransactionChargeRequestedWebhook.createHandler(handleWebhook);
+export default transactionChargeRequestedWebhook.createHandler(handler);
