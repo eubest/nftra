@@ -69,9 +69,9 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
 
   try {
     if (action.actionType === "REFUND") {
-      if (isMollieTransaction(transaction)) {
+      if (isMolieTransaction(transaction)) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
+        await handleMolieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
@@ -89,7 +89,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
 
     if (action.actionType === "VOID") {
-      if (isMollieTransaction(transaction)) {
+      if (isMolieTransaction(transaction)) {
         // TODO: Handle Mollie void payment
       }
       if (isAdyenTransaction(transaction)) {
