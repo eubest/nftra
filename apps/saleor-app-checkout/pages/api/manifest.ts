@@ -19,7 +19,7 @@ const handler = createManifestHandler({
       supportUrl: `${appBaseUrl}/support`,
       tokenTargetUrl: `${appBaseUrl}/api/register`,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      webhooks: [transactionChargeRequestedWebhook.getWebhookManifest(appBaseUrl)],
+      webhooks: [_transactionChargeRequestedWebhook.getWebhookManifest(appBaseUrl)],
     };
   },
 });
