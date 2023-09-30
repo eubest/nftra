@@ -106,7 +106,7 @@ const _handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async 
   console.log("Refund processing complete with pspReference:", pspReference);
   return res.status(200).json({ success: true, pspReference: pspReference });
 };
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const _transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
