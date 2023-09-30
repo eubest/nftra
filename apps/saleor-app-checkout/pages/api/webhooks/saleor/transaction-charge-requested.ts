@@ -4,9 +4,7 @@ import {
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { Response } from "retes/response";
-import {
-  updateTransactionProcessedEvents,
-} from "@/saleor-app-checkout/backend/payments";
+import { updateTransactionProcessedEvents } from "@/saleor-app-checkout/backend/payments/updateTransactionProcessedEvents";
 import {
   isAdyenTransaction,
   isDummyTransaction,
