@@ -24,14 +24,14 @@ export const config = {
   },
 };
 
-const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+const _transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
   event: "TRANSACTION_CHARGE_REQUESTED",
   apl: saleorApp.apl,
   subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
