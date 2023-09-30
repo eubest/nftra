@@ -23,7 +23,7 @@ export const config = {
     bodyParser: false,
   },
 };
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
