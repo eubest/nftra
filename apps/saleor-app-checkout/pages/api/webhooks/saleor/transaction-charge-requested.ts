@@ -107,4 +107,4 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true, pspReference: pspReference });
 };
 
-export default transactionChargeRequestedWebhook.createHandler(handler);
+export const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({ ... });

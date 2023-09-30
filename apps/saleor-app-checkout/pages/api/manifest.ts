@@ -1,6 +1,6 @@
 import { appName } from "../../constants";
 import { version } from "../../package.json";
-import transactionChargeRequestedWebhook from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charge-requested";
+import { transactionChargeRequestedWebhook } from "@/saleor-app-checkout/pages/api/webhooks/saleor/transaction-charge-requested";
 import { createManifestHandler } from "@saleor/app-sdk/handlers/next";
 import { AppManifest } from "@saleor/app-sdk/types";
 
