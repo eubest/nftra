@@ -107,4 +107,10 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true, pspReference: pspReference });
 };
 
-export const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({ ... });
+export const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+  name: "Checkout app payment notifications",
+  webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
+  event: "TRANSACTION_CHARGE_REQUESTED",
+  apl: saleorApp.apl,
+  subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
+});
