@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import {
   TransactionActionPayloadFragment,
+  TransactionActionRequestSubscriptionDocument,
 } from "@/saleor-app-checkout/graphql";
 import { TransactionReversal } from "@/saleor-app-checkout/types/refunds";
 import { Response } from "retes/response";
@@ -10,8 +11,7 @@ import {
   isDummyTransaction,
   isMollieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
+import { handleMollieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
 import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
 import { NextWebhookApiHandler, SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
@@ -30,12 +30,8 @@ const TransactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActio
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
   event: "TRANSACTION_CHARGE_REQUESTED",
   apl: saleorApp.apl,
-  subscriptionQueryAst: TransactionChargeRequestedSubscriptionDocument,
+  subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
-
-const validateTransactionData = (transaction: TransactionActionPayloadFragment | null | undefined) => {
-  return transaction?.type && transaction?.action?.amount;
-};
 
 const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
@@ -49,12 +45,16 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
 
   console.log("Start processing Saleor transaction action", action, transaction);
 
-  if (!validateTransactionData(transaction)) {
-    console.warn("Received webhook call without transaction data", transaction?.type, action?.amount);
+  if (!transaction?.type || !action?.amount) {
+    console.warn(
+      "Received webhook call without transaction data",
+      transaction?.type,
+      action?.amount
+    );
     return Response.BadRequest({ success: false, message: "Missing transaction data" });
   }
 
-  const { "saleor-signature": payloadSignature } = req.headers as { "saleor-signature": string };
+  const { "saleor-signature": payloadSignature } = req.headers;
 
   if (!payloadSignature) {
     console.warn("Missing Saleor signature");
@@ -70,15 +70,12 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
   try {
     if (action.actionType === "REFUND") {
       if (isMollieTransaction(transaction)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleAdyenRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isDummyTransaction(transaction)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleDummyRefund({
           saleorApiUrl,
           refund: {
@@ -100,14 +97,13 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
   } catch (err) {
     console.error(err);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     Sentry.captureException(err);
     return res.status(500).json({
       success: false,
       message: "Error while processing event",
     });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
   await updateTransactionProcessedEvents(saleorApiUrl, {
     id: transaction.id,
     input: JSON.stringify([...processedEvents, payloadSignature]),
