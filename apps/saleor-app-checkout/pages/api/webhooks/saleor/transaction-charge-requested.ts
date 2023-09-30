@@ -70,6 +70,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
   try {
     if (action.actionType === "REFUND") {
       if (isMollieTransaction(transaction)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleMollieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
       if (isAdyenTransaction(transaction)) {
