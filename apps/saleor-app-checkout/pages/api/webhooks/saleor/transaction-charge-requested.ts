@@ -10,6 +10,7 @@ import {
   isDummyTransaction,
   isMollieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
 import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
