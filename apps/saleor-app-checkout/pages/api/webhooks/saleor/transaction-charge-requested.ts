@@ -9,9 +9,9 @@ import { updateTransactionProcessedEvents } from "@/saleor-app-checkout/backend/
 import {
   isAdyenTransaction,
   isDummyTransaction,
-  isMolieTransaction,
+  isMollieTransaction,
 } from "@/saleor-app-checkout/backend/payments/utils";
-import { handleMolieRefund } from "@/saleor-app-checkout/backend/payments/providers/molie";
+import { handleMollieRefund } from "@/saleor-app-checkout/backend/payments/providers/mollie";
 import { handleAdyenRefund } from "@/saleor-app-checkout/backend/payments/providers/adyen";
 import { handleDummyRefund } from "@/saleor-app-checkout/backend/payments/providers/dummy/refunds";
 import { NextWebhookApiHandler, SaleorSyncWebhook } from "@saleor/app-sdk/handlers/next";
@@ -69,7 +69,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
 
   try {
     if (action.actionType === "REFUND") {
-      if (isMolieTransaction(transaction)) {
+      if (isMollieTransaction(transaction)) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await handleMolieRefund({ saleorApiUrl, refund: transactionReversal, transaction });
       }
@@ -89,7 +89,7 @@ const handleWebhook: NextWebhookApiHandler<TransactionActionPayloadFragment> = a
     }
 
     if (action.actionType === "VOID") {
-      if (isMolieTransaction(transaction)) {
+      if (isMollieTransaction(transaction)) {
         // TODO: Handle Mollie void payment
       }
       if (isAdyenTransaction(transaction)) {
