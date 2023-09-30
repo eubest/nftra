@@ -24,7 +24,7 @@ export const config = {
   },
 };
 
-const _transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
   event: "TRANSACTION_CHARGE_REQUESTED",
