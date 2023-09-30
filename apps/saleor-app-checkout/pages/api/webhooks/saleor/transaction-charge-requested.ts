@@ -32,7 +32,7 @@ const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActio
   subscriptionQueryAst: TransactionActionRequestSubscriptionDocument,
 });
 
-const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
+const _handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   req,
   res,
   context
@@ -107,7 +107,7 @@ const handler: NextWebhookApiHandler<TransactionActionPayloadFragment> = async (
   return res.status(200).json({ success: true, pspReference: pspReference });
 };
 
-export const transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
+export const _transactionChargeRequestedWebhook = new SaleorSyncWebhook<TransactionActionPayloadFragment>({
   name: "Checkout app payment notifications",
   webhookPath: SALEOR_WEBHOOK_TRANSACTION_ENDPOINT,
   event: "TRANSACTION_CHARGE_REQUESTED",
